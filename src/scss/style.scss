@@ -1,0 +1,81 @@
+@import './base';
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+html {
+  overflow-y: scroll;
+  position: relative;
+  min-height: 100vh;
+}
+
+ul {
+  list-style-type: none;
+}
+
+input,
+button,
+textarea {
+  outline: none;
+}
+
+textarea {
+  resize: none;
+}
+
+img {
+  max-width: 100%;
+  object-fit: cover;
+}
+
+a {
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+.container {
+  max-width: $container-max-width;
+  margin: 0 auto;
+}
+
+.section-padding {
+  padding-right: $section-padding-mobile;
+  padding-left: $section-padding-mobile;
+
+  @media (min-width: $breakpoint-tablet) {
+    padding-right: $section-padding-tablet;
+    padding-left: $section-padding-tablet;
+  }
+
+  @media (min-width: $breakpoint-laptop) {
+    padding-right: $section-padding-laptop;
+    padding-left: $section-padding-laptop;
+  }
+}
+
+.button {
+  padding: 16px 20px;
+  background-color: $color-dark;
+  border: none;
+  color: $color-white;
+  transition: ease 0.2s;
+
+  &:hover {
+    background-color: $color-black;
+  }
+
+  &.blue {
+    background-color: $color-blue;
+
+    &:hover {
+      background-color: $color-black;
+    }
+  }
+}
