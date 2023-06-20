@@ -30,7 +30,7 @@ import { defineComponent } from 'vue'
 import PageTitle from '@/components/PageTitle.vue'
 import CartItems from '@/components/CartItems.vue'
 import ModalConfirm from '@/components/ModalConfirm.vue'
-import store from '@/store'
+import store, { clearCart } from '@/store'
 import { errorMsg } from '@/store/messages'
 
 interface FetchPost {
@@ -80,7 +80,7 @@ export default defineComponent({
         .then(res => res.json())
         .then(() => {
           this.modal = 'Success!'
-          store.cartProducts = []
+          clearCart(store)
         })
         .catch(() => {
           this.modal = errorMsg

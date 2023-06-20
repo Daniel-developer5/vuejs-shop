@@ -12,16 +12,40 @@ export interface Cart {
   products: [],
 }
 
+type cartProducts = Array<Product & { amount: number }>
+
 interface Store {
   products: Product[],
-  cartProducts: Array<Product & { amount: number }>,
+  cartProducts: cartProducts,
   total: number,
+}
+
+export const getFromLocalStorage = (): cartProducts | null => {
+  const items = window.localStorage.getItem('cartProducts')
+  
+  if (items) {
+    return JSON.parse(items)
+  }
+
+  return null
+}
+
+export const getTotalFromLocalStorage = (): number | null => {
+  const total = window.localStorage.getItem('total')
+  
+  if (total) {
+    if (!isNaN(+total)) {
+      return +total
+    }
+  }
+
+  return null
 }
 
 const store: Store = reactive({
   products: [],
-  cartProducts: [],
-  total: 0,
+  cartProducts: getFromLocalStorage() || [],
+  total: getTotalFromLocalStorage() || 0,
 })
 
 const findIndex = (store: Store, field: 'products' | 'cartProducts', productId: string) => (
@@ -42,12 +66,14 @@ export const addToCart = (store: Store, productId: string, amount?: number) => {
   }
 
   store.total = getTotalPrice(store)
+  saveToLocalStorage(store)
 }
 
 export const removeFromCart = (store: Store, productId: string) => {
   store.cartProducts = store.cartProducts.filter(({ id }) => id !== productId)
 
   store.total = getTotalPrice(store)
+  saveToLocalStorage(store)
 }
 
 export const getTotalPrice = (store: Store) => (
@@ -57,5 +83,16 @@ export const getTotalPrice = (store: Store) => (
 export const getTotalAmount = (store: Store) => (
   store.cartProducts.reduce((total, product) => total + product.amount, 0)
 )
+
+export const saveToLocalStorage = (store: Store) => {
+  window.localStorage.setItem('cartProducts', JSON.stringify(store.cartProducts))
+  window.localStorage.setItem('total', JSON.stringify(store.total))
+}
+
+export const clearCart = (store: Store) => {
+  store.cartProducts = []
+  store.total = 0
+  saveToLocalStorage(store)
+}
 
 export default store
