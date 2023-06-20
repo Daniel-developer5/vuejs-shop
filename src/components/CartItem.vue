@@ -5,7 +5,7 @@
       <h3 class="title">{{ product.title }}</h3>
       <span class="price">{{ priceCurrency }}</span>
     </div>
-    <input type="number" v-model="amount">
+    <input type="number" v-model="amount" @blur="onBlurInput">
     <button class="button" @click="onRemove()">Remove</button>
     <ModalConfirm
       v-if="modal"
@@ -54,6 +54,11 @@ export default defineComponent({
     onDecline() {
       this.modal = false
     },
+    onBlurInput(e: FocusEvent) {
+      if ((e.target as HTMLInputElement).value === '') {
+        this.amount = 1
+      }
+    },
   },
   computed: {
     priceCurrency() {
@@ -61,11 +66,19 @@ export default defineComponent({
     },
   },
   watch: {
-    amount(newValue: number, oldValue: number) {
+    amount(newValue: number | string, oldValue: number) {
+      if (newValue === '') {
+        return
+      }
+      
       if (newValue !== oldValue) {
-        if (newValue <= 0) {
+        if (+newValue <= 0) {
           this.amount = 1
-          this.onRemove()
+          
+          if (newValue === 0) {
+            this.onRemove()
+          }
+
           return
         }
 

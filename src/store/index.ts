@@ -54,4 +54,8 @@ export const getTotalPrice = (store: Store) => (
   store.cartProducts.reduce((total, product) => total + product.price * product.amount, 0)
 )
 
+export const getTotalAmount = (store: Store) => (
+  store.cartProducts.reduce((total, product) => total + product.amount, 0)
+)
+
 export default store
